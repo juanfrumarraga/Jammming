@@ -98,7 +98,8 @@ class App extends Component {
 
 
   search(searchTerm){
-    Spotify.search(searchTerm).then(trackList=>this.setState({searchResults:trackList}))
+    Spotify.search(searchTerm).then(tracks=>console.log(tracks)).then(tracks=>this.setState({searchResults:tracks}))
+
   }
 
 

@@ -31,22 +31,26 @@ const Spotify = {
 },
 
   search(term){
-    fetch(`https://api.spotify.com/v1/search?q=${term}&type=track`, {
-      headers: this.buildHeaders()}).then(response=>{
+    return fetch(`https://api.spotify.com/v1/search?q=${term}&type=track`, {
+      headers: this.buildHeaders()
+    }).then(response=>{
         if (response.ok) {
           return response.json()
         }
       }).then(jsonReponse =>{
           if (jsonReponse.tracks) {
             console.log(jsonReponse.tracks.items);
-            return jsonReponse.tracks.items.map(track=>({id: track.id,
-            Name: track.name,
-            Album: track.album.name,
-            Artist: track.artists[0].name,
-            URI: track.uri}))
+            return jsonReponse.tracks.items.map(track=>({
+              id: track.id,
+              Name: track.name,
+              Album: track.album.name,
+              Artist: track.artists[0].name,
+              URI: track.uri
+            }))
           }
       })
     },
+
 
 
   buildHeaders(){
