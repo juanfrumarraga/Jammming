@@ -17,13 +17,11 @@ const Spotify = {
     let url = window.location.href;
     console.log(url);
     accessToken = url.match(/access_token=([^&]*)/);
-    console.log(typeof accessToken);
     if (accessToken) {
         expiresIn = url.match(/expires_in=([^&]*)/)
-        window.setTimeout(() => accessToken = '', expiresIn * 1000);
+        window.setTimeout(() => accessToken = '', expiresIn[1] * 1000);
         window.history.pushState('Access Token', null, '/');
         console.log("access token successful retrieved.");
-        console.log(accessToken);
         return accessToken[1];
     } else {
         // 3. case: fetch from spotify
@@ -36,11 +34,17 @@ const Spotify = {
     fetch(`https://api.spotify.com/v1/search?q=${term}&type=track`, {
       headers: this.buildHeaders()}).then(response=>{
         if (response.ok) {
-          return response.json
+          return response.json()
         }
       }).then(jsonReponse =>{
-        console.log(jsonReponse);
-        return jsonReponse
+          if (jsonReponse.tracks) {
+            console.log(jsonReponse.tracks.items);
+            return jsonReponse.tracks.items.map(track=>({id: track.id,
+            Name: track.name,
+            Album: track.album.name,
+            Artist: track.artists[0].name,
+            URI: track.uri}))
+          }
       })
     },
 
